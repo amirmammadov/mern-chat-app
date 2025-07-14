@@ -13,9 +13,13 @@ import {
 } from "./pages";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
+import { useThemeStore } from "./store/useThemeStore";
+
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
@@ -30,7 +34,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div data-theme={theme}>
       <Navbar />
 
       <Routes>
