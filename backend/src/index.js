@@ -8,9 +8,9 @@ import messageRoutes from "../src/routes/message.route.js";
 
 import { connectDB } from "./lib/db.js";
 
-dotenv.config();
+import { app, server } from "./lib/socket.js";
 
-const app = express();
+dotenv.config();
 
 app.use(express.json());
 
@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 3000;
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
   try {
     await connectDB();
     console.log(`Server is running on Port: ${PORT}`);
