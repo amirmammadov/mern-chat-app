@@ -18,12 +18,20 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [process.env.CLIENT_URL, process.env.VERCEL_URL],
     credentials: true,
   })
 );
 
 const PORT = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  try {
+    res.json("hello world");
+  } catch (error) {
+    res.json(error);
+  }
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
