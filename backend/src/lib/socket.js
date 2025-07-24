@@ -3,13 +3,11 @@ import http from "http";
 import express from "express";
 
 const app = express();
-
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [process.env.CLIENT_URL, process.env.VERCEL_URL],
-    credentials: true,
+    origin: ["http://localhost:5173"],
   },
 });
 
@@ -20,17 +18,16 @@ export function getReceiverSocketId(userId) {
 const userSocketMap = {};
 
 io.on("connection", (socket) => {
-  console.log("User connected: ", socket.id);
+  console.log("A user connected", socket.id);
 
-  const usedId = socket.handshake.query.userId;
-
-  if (usedId) userSocketMap[usedId] = socket.id;
+  const userId = socket.handshake.query.userId;
+  if (userId) userSocketMap[userId] = socket.id;
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
-    console.log("User disconnected: ", socket.id);
-    delete userSocketMap[usedId];
+    console.log("A user disconnected", socket.id);
+    delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
